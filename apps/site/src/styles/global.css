@@ -1,16 +1,31 @@
-/* Global styles. Light and dark themes follow the OS preference. Layout is a
-   single readable column; the goal is fast, legible prose with room for wide
-   interactive demos. */
+/* Global styles.
+
+   Layout: a fixed dark sidebar on the left (Chirpy-inspired — big circular
+   avatar, title, tagline, icon nav, social row) with the content column offset
+   to its right. The sidebar is intentionally dark in BOTH site themes so the
+   cosmic logo reads well and the OG JPEG's background matches it; the content
+   column still follows the light/dark OS preference. On narrow screens the
+   sidebar collapses to a top bar (CSS only, no JS). */
 
 :root {
+  /* Content theme (light default) */
   --bg: #ffffff;
   --fg: #1a1a1a;
   --muted: #666666;
   --border: #e5e5e5;
-  --accent: #2b56d4;
+  --accent: #5b3fd6;
   --code-bg: #f5f5f7;
-  --demo-accent: #2b56d4;
+  --demo-accent: #5b3fd6;
   --content-width: 44rem;
+
+  /* Sidebar (theme-independent — always dark) */
+  --sidebar-width: 16rem;
+  --sidebar-bg: radial-gradient(circle at 50% 22%, #242424 0%, #1d1f27 100%);
+  --sidebar-fg: #b6b6c2;
+  --sidebar-muted: #85858f;
+  --sidebar-border: rgba(255, 255, 255, 0.06);
+  --brand: #8b6cff;
+
   --font-sans:
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
     sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
@@ -25,9 +40,9 @@
     --fg: #e7e7ea;
     --muted: #9a9aa5;
     --border: #262a33;
-    --accent: #7aa2ff;
+    --accent: #a78bff;
     --code-bg: #171a21;
-    --demo-accent: #7aa2ff;
+    --demo-accent: #a78bff;
   }
 }
 
@@ -46,21 +61,6 @@ body {
   font-family: var(--font-sans);
   font-size: 18px;
   line-height: 1.65;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.wrap {
-  width: 100%;
-  max-width: var(--content-width);
-  margin-inline: auto;
-  padding-inline: 1.25rem;
-}
-
-main.wrap {
-  flex: 1 0 auto;
-  padding-block: 2.5rem;
 }
 
 a {
@@ -71,37 +71,167 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Header / footer */
-.site-header {
-  border-bottom: 1px solid var(--border);
+/* ---------- Sidebar ---------- */
+#sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: var(--sidebar-width);
+  display: flex;
+  flex-direction: column;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  overflow-y: auto;
+  z-index: 99;
 }
-.site-header .wrap,
-.site-footer .wrap {
+
+.profile {
+  margin: 2.25rem 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.avatar {
+  width: 7rem;
+  height: 7rem;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 0.06),
+    0 6px 20px rgba(0, 0, 0, 0.5);
+  transition: transform 0.4s ease;
+}
+.avatar:hover {
+  transform: scale(1.04);
+}
+.avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.site-title {
+  margin-top: 1rem;
+  font-weight: 900;
+  font-size: 1.6rem;
+  line-height: 1.15;
+  letter-spacing: 0.2px;
+  color: #f2f2f5;
+}
+.site-title:hover {
+  color: var(--brand);
+  text-decoration: none;
+}
+.site-tagline {
+  margin: 0.4rem 0 0;
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--sidebar-muted);
+}
+
+.sidebar-nav {
+  width: 100%;
+}
+.sidebar-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.nav-link {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-block: 1rem;
-}
-.site-header .brand {
+  gap: 0.7rem;
+  padding: 0.55rem 0.8rem;
+  border-radius: 0.7rem;
+  color: var(--sidebar-fg);
+  font-size: 0.82rem;
   font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--fg);
+  letter-spacing: 0.5px;
 }
-.site-header nav {
+.nav-link svg {
+  width: 1.05rem;
+  height: 1.05rem;
+  flex: none;
+  opacity: 0.9;
+}
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  text-decoration: none;
+}
+.nav-link.active {
+  background: rgba(139, 108, 255, 0.16);
+  color: #ffffff;
+}
+
+.sidebar-bottom {
+  margin-top: auto;
   display: flex;
-  gap: 1.25rem;
+  gap: 0.4rem;
+  padding: 1rem 1.25rem 1.5rem;
 }
-.site-header nav a {
-  color: var(--muted);
+.sidebar-bottom a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  color: var(--sidebar-muted);
 }
+.sidebar-bottom a:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  text-decoration: none;
+}
+.sidebar-bottom svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+/* ---------- Content column ---------- */
+#content {
+  margin-left: var(--sidebar-width);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--content-width);
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+main.wrap {
+  flex: 1 0 auto;
+  padding-block: 2.75rem;
+}
+
 .site-footer {
   border-top: 1px solid var(--border);
   color: var(--muted);
   font-size: 0.9rem;
 }
+.site-footer .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 1.25rem;
+}
 
-/* Post list (home) */
+/* ---------- Post list (home) ---------- */
+.page-title {
+  font-size: 2rem;
+  margin: 0 0 1.75rem;
+}
 .post-list {
   list-style: none;
   margin: 0;
@@ -123,7 +253,7 @@ a:hover {
   color: var(--muted);
 }
 
-/* Post */
+/* ---------- Post ---------- */
 .post-header h1 {
   font-size: 2.1rem;
   line-height: 1.15;
@@ -150,7 +280,7 @@ a:hover {
   padding: 0.1rem 0.6rem;
 }
 
-/* Prose */
+/* ---------- Prose ---------- */
 .prose {
   margin-top: 2rem;
 }
@@ -193,8 +323,7 @@ a:hover {
   color: var(--muted);
 }
 
-/* Interactive demo — allowed to break out slightly wider than the prose column
-   on large screens, and scrolls rather than overflowing the page on small ones. */
+/* ---------- Interactive demo ---------- */
 .demo {
   margin: 2rem 0;
 }
@@ -215,9 +344,62 @@ a:hover {
   font-size: 0.9rem;
 }
 
-@media (min-width: 60rem) {
+@media (min-width: 78rem) {
   .demo {
-    width: min(56rem, 90vw);
-    margin-inline: calc((var(--content-width) - min(56rem, 90vw)) / 2);
+    width: min(52rem, 88vw);
+    margin-inline: calc((var(--content-width) - min(52rem, 88vw)) / 2);
+  }
+}
+
+/* ---------- Responsive: collapse sidebar to a top bar ---------- */
+@media (max-width: 60rem) {
+  #sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 1rem;
+    padding: 0.7rem 1rem;
+    overflow: visible;
+  }
+  .profile {
+    margin: 0;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.6rem;
+    text-align: left;
+  }
+  .avatar {
+    width: 2.6rem;
+    height: 2.6rem;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08);
+  }
+  .site-title {
+    margin: 0;
+    font-size: 1.15rem;
+  }
+  .site-tagline {
+    display: none;
+  }
+  .sidebar-nav {
+    width: auto;
+    margin-left: auto;
+  }
+  .sidebar-nav ul {
+    flex-direction: row;
+    padding: 0;
+    gap: 0.2rem;
+  }
+  .nav-link {
+    padding: 0.4rem 0.7rem;
+  }
+  .sidebar-bottom {
+    margin: 0;
+    padding: 0;
+  }
+  #content {
+    margin-left: 0;
   }
 }
