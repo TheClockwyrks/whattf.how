@@ -8,6 +8,7 @@ ARG USER_GID
 ARG LAZYGIT_VERSION
 ARG NODE_VERSION
 ARG RUST_VERSION
+ARG WASM_PACK_VERSION
 ARG TZ
 
 # Install apt packages, base OS configuration, and the container user.
