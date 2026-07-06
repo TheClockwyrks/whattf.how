@@ -1,0 +1,4 @@
+# Host-specific override, created locally when the defaults don't fit (e.g. a
+# rootless Podman host that needs DEVCONTAINER_GID=100). Not committed so host
+# choices stay local.
+.env

@@ -1,0 +1,24 @@
+{
+  "name": "whattf.how",
+  "dockerComposeFile": ["docker-compose.yml"],
+  "service": "dev",
+  "workspaceFolder": "/workspaces/whattf.how",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "astro-build.astro-vscode",
+        "rust-lang.rust-analyzer",
+        "tamasfe.even-better-toml",
+        "EditorConfig.EditorConfig",
+        "esbenp.prettier-vscode",
+        "timonwong.shellcheck"
+      ]
+    }
+  },
+  "forwardPorts": [4321],
+  // The cargo-target named volume persists across rebuilds; if it was ever
+  // created root-owned, reclaim it for the container user so CARGO_TARGET_DIR
+  // stays writable.
+  "postCreateCommand": "sudo chown \"$(id -u):$(id -g)\" /cargo-target",
+  "updateRemoteUserUID": false
+}

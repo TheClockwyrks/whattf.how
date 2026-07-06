@@ -1,0 +1,30 @@
+# Node
+node_modules/
+npm-debug.log*
+*.tsbuildinfo
+
+# Astro
+apps/site/dist/
+apps/site/.astro/
+.astro/
+
+# Generated wasm-pack output (produced by scripts/build-wasm.mjs).
+apps/site/src/wasm/
+
+# Rust / Cargo build output. Cargo.lock IS committed (this workspace builds
+# artifacts — the demo cdylibs — not just libraries).
+target/
+**/*.rs.bk
+
+# Cloudflare / wrangler
+.wrangler/
+
+# Env & host-local
+.env
+.env.local
+.dev.vars
+
+# Editors / OS
+.DS_Store
+*~
+.idea/

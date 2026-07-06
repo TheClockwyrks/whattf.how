@@ -1,0 +1,24 @@
+{
+  "name": "whattf-how",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run build:wasm && npm run dev -w @whattf/site",
+    "build:wasm": "node scripts/build-wasm.mjs",
+    "build": "npm run build:wasm && npm run build -w @whattf/site",
+    "preview": "npm run preview -w @whattf/site",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "3.8.4",
+    "prettier-plugin-astro": "^0.14.1"
+  }
+}

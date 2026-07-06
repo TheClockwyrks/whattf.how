@@ -1,0 +1,20 @@
+[package]
+name = "demo-bouncing"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# `cdylib` is the WebAssembly artifact wasm-pack compiles; `rlib` lets the crate
+# also build and run natively under `cargo test`.
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+wasm-bindgen = "0.2"
+
+# Modern rustc emits bulk-memory and non-trapping float-to-int ops for wasm by
+# default. Tell wasm-pack's bundled `wasm-opt` to accept them (all are broadly
+# supported by browsers). `-Os` optimizes the module for size. Any new demo
+# crate needs this same block.
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = ["-Os", "--enable-bulk-memory", "--enable-nontrapping-float-to-int"]

@@ -1,0 +1,7 @@
+node_modules
+apps/site/dist
+apps/site/.astro
+apps/site/src/wasm
+target
+package-lock.json
+Cargo.lock

@@ -1,0 +1,39 @@
+---
+title: "Hello, world (and a bouncing-balls demo)"
+description: "Why this blog exists, and a first interactive demo running in WebAssembly."
+pubDate: 2026-07-06
+tags: ["meta", "webassembly"]
+---
+
+import BouncingBalls from "../../components/BouncingBalls.tsx";
+
+This is the first post on whattf.how. The whole reason the site is hand-built
+instead of using an off-the-shelf blog is so posts can do _this_:
+
+<BouncingBalls client:visible count={80} />
+
+That's not a video or a GIF — it's a physics simulation stepping in Rust,
+compiled to WebAssembly, running live in your browser. The page shipped as
+static HTML; the simulation only downloaded and started when you scrolled it
+into view (`client:visible`).
+
+## Why bother
+
+The tutorials that helped me most when I was learning — Red Blob Games, Gaffer
+On Games — didn't just _describe_ an idea, they let you play with it. A slider
+you can drag beats three paragraphs explaining what the slider would do. That's
+the bar I want to aim for here.
+
+## How this one works
+
+The Rust side owns the simulation and keeps its surface tiny — each frame it
+hands JavaScript a flat `[x, y, r, …]` buffer of ball positions:
+
+```rust
+pub fn tick(&mut self, dt: f32) { /* integrate + bounce off walls */ }
+pub fn positions(&mut self) -> Vec<f32> { /* [x, y, r] per ball */ }
+```
+
+A small React island calls `tick` once per animation frame and draws the buffer
+to a `<canvas>`. No `web-sys`, no DOM code in Rust — the island owns the canvas.
+More on the toolchain in a future post.

@@ -1,0 +1,223 @@
+/* Global styles. Light and dark themes follow the OS preference. Layout is a
+   single readable column; the goal is fast, legible prose with room for wide
+   interactive demos. */
+
+:root {
+  --bg: #ffffff;
+  --fg: #1a1a1a;
+  --muted: #666666;
+  --border: #e5e5e5;
+  --accent: #2b56d4;
+  --code-bg: #f5f5f7;
+  --demo-accent: #2b56d4;
+  --content-width: 44rem;
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --font-mono:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
+    monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1115;
+    --fg: #e7e7ea;
+    --muted: #9a9aa5;
+    --border: #262a33;
+    --accent: #7aa2ff;
+    --code-bg: #171a21;
+    --demo-accent: #7aa2ff;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 18px;
+  line-height: 1.65;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--content-width);
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+main.wrap {
+  flex: 1 0 auto;
+  padding-block: 2.5rem;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* Header / footer */
+.site-header {
+  border-bottom: 1px solid var(--border);
+}
+.site-header .wrap,
+.site-footer .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 1rem;
+}
+.site-header .brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--fg);
+}
+.site-header nav {
+  display: flex;
+  gap: 1.25rem;
+}
+.site-header nav a {
+  color: var(--muted);
+}
+.site-footer {
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* Post list (home) */
+.post-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+.post-list li a {
+  color: var(--fg);
+  font-size: 1.35rem;
+  font-weight: 650;
+}
+.post-list .post-meta {
+  margin: 0.25rem 0 0;
+}
+.post-list p.summary {
+  margin: 0.4rem 0 0;
+  color: var(--muted);
+}
+
+/* Post */
+.post-header h1 {
+  font-size: 2.1rem;
+  line-height: 1.15;
+  margin: 0 0 0.5rem;
+}
+.post-meta {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin: 0;
+}
+.tags {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0.75rem 0 0;
+}
+.tags li {
+  font-size: 0.8rem;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.1rem 0.6rem;
+}
+
+/* Prose */
+.prose {
+  margin-top: 2rem;
+}
+.prose > * + * {
+  margin-top: 1.1rem;
+}
+.prose h2 {
+  margin-top: 2.25rem;
+  font-size: 1.5rem;
+}
+.prose h3 {
+  margin-top: 1.75rem;
+  font-size: 1.2rem;
+}
+.prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+.prose pre {
+  background: var(--code-bg);
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 0.9rem;
+}
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+.prose :not(pre) > code {
+  background: var(--code-bg);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+}
+.prose blockquote {
+  margin-inline: 0;
+  padding-left: 1rem;
+  border-left: 3px solid var(--border);
+  color: var(--muted);
+}
+
+/* Interactive demo — allowed to break out slightly wider than the prose column
+   on large screens, and scrolls rather than overflowing the page on small ones. */
+.demo {
+  margin: 2rem 0;
+}
+.demo canvas {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  max-width: 100%;
+}
+.demo figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: center;
+}
+.demo-loading {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+@media (min-width: 60rem) {
+  .demo {
+    width: min(56rem, 90vw);
+    margin-inline: calc((var(--content-width) - min(56rem, 90vw)) / 2);
+  }
+}

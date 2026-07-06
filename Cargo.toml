@@ -1,0 +1,12 @@
+[workspace]
+resolver = "2"
+members = ["crates/*"]
+
+# Small, fast wasm is the goal for embedded demos: optimize for size and strip
+# debug info in release builds so the .wasm payload stays lean.
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

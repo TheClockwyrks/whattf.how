@@ -1,0 +1,25 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="About" description="About whattf.how and its author.">
+  <article class="post">
+    <header class="post-header">
+      <h1>About</h1>
+    </header>
+    <div class="prose">
+      <p>
+        whattf.how is where I write about the projects I'm building — with a
+        bias toward posts that teach by showing: embedded video and in-browser,
+        playable simulations you can poke at.
+      </p>
+      <p>
+        The site is hand-built (no off-the-shelf blog framework) on
+        <a href="https://astro.build/">Astro</a>, so pages ship as static HTML
+        with no JavaScript unless a post actually needs it. The interactive
+        demos are written in Rust, compiled to WebAssembly, and embedded as
+        islands that load only when you scroll to them.
+      </p>
+    </div>
+  </article>
+</BaseLayout>

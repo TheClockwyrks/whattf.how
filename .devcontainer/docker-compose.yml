@@ -1,0 +1,38 @@
+x-devcontainer-build-args: &devcontainer-build-args
+  USERNAME: ${DEVCONTAINER_USERNAME:-vscode}
+  USER_UID: ${DEVCONTAINER_UID:-1000}
+  # Default primary GID is 1000 (Docker). Rootless Podman hosts commonly use GID
+  # 100 (`users`); set DEVCONTAINER_GID=100 in a .devcontainer/.env there.
+  USER_GID: ${DEVCONTAINER_GID:-1000}
+  LAZYGIT_VERSION: 0.61.1
+  NODE_VERSION: 24.16.0
+  RUST_VERSION: 1.96.0
+  TZ: ${TZ:-UTC}
+
+services:
+  dev:
+    build:
+      args:
+        <<: *devcontainer-build-args
+      context: .
+      dockerfile: ./whattf.dockerfile
+    # Keep the container alive after the build's entrypoint exits.
+    command: sleep infinity
+    init: true
+    environment:
+      - TZ=${TZ:-UTC}
+      # Cargo's target dir lives on a native named volume (below), NOT under the
+      # host-mounted workspace. On a macOS host (e.g. OrbStack) the workspace is a
+      # virtiofs mount; keeping build artifacts on a coherent native filesystem
+      # avoids cross-filesystem races at high build parallelism.
+      - CARGO_TARGET_DIR=/cargo-target/whattf-how
+    stdin_open: true
+    tty: true
+    volumes:
+      - ..:/workspaces/whattf.how:rw
+      - cargo-target:/cargo-target
+
+volumes:
+  # Cargo build artifacts, kept off the host-mounted workspace; survives
+  # container restarts and rebuilds.
+  cargo-target:
