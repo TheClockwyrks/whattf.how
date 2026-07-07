@@ -1,39 +1,55 @@
 ---
-title: "Hello, world (and a bouncing-balls demo)"
-description: "Why this blog exists, and a first interactive demo running in WebAssembly."
+title: "Hello, World!"
+description: "Why this blog exists."
 pubDate: 2026-07-06
-tags: ["meta", "webassembly"]
 ---
 
 import BouncingBalls from "../../components/BouncingBalls.tsx";
 
-This is the first post on whattf.how. The whole reason the site is hand-built
-instead of using an off-the-shelf blog is so posts can do _this_:
+I recently began working on [The Test Cabinet](https://www.testcabinet.ai),
+which is a benchmark I created to evaluate large language models and harnesses
+on large-scale software engineering challenges. And by large scale, I don't mean
+"write 1000-2000 lines of code". I mean more like "Write a game engine from
+scratch and implement a small game on top of it". That has shown not only the
+very obvious limits of current LLMs, but also how capable they've gotten.
+
+While LLMs fail pretty hard at the more challenging test cases, they're now good
+enough that it's trivially simple to use them for one-off implementations or
+simple projects, which opens up a new opportunity that wasn't previously
+available to me.
+
+I taught myself to code by looking for tutorials and other learning resources
+whenever I wanted to implement something that I didn't know how to write myself.
+Searching for material to teach myself new techniques led me to some remarkably
+useful sites, written by incredibly talented people. [Gaffer on Games](https://gafferongames.com/)
+taught me a ton about writing [networking code for games](https://gafferongames.com/categories/game-networking/).
+[Red Blob Games](https://www.redblobgames.com/) has a ton of miscellaneous
+content covering all sorts of topics useful for game developers. And
+[Cat Like Coding](https://catlikecoding.com/)'s [hex map](https://catlikecoding.com/unity/tutorials/hex-map/)
+tutorial is one of the best I've ever seen for how to generate geometry for hex
+terrain.
+
+What all of these blogs have in common is a heavy emphasis on visuals and/or
+interactive examples. For example, the Gaffer on Games post about
+[Deterministic Lockstep](https://gafferongames.com/post/deterministic_lockstep/)
+includes side by side comparisons showing the effects of non-determinism. Red
+Blob Games' [A*](https://www.redblobgames.com/pathfinding/a-star/introduction.html)
+article includes animations that you can play step by step and examples where
+you can modify the map and watch the algorithm adjust in real time. And having
+written plenty of code for generating meshes from data, Cat Like Coding's
+heavy emphasis on visuals is invaluable for working out how
+[complex graphical techniques](https://catlikecoding.com/unity/tutorials/hex-map/part-8/)
+can be generated entirely in code.
+
+My goal for this blog is to explore various techniques and write them up as
+articles or tutorial series that go through how the techniques work, when
+they're applicable, and how to build them yourself. This is significantly more
+viable now that LLMs exist, since I can focus on what the techniques I want to
+show are and let the LLM generate the code demonstrating the technique. I expect
+I'll end up handling this largely using Rust compiled to WASM, which is how this
+example is handled:
 
 <BouncingBalls client:visible count={80} />
 
-That's not a video or a GIF — it's a physics simulation stepping in Rust,
-compiled to WebAssembly, running live in your browser. The page shipped as
-static HTML; the simulation only downloaded and started when you scrolled it
-into view (`client:visible`).
-
-## Why bother
-
-The tutorials that helped me most when I was learning — Red Blob Games, Gaffer
-On Games — didn't just _describe_ an idea, they let you play with it. A slider
-you can drag beats three paragraphs explaining what the slider would do. That's
-the bar I want to aim for here.
-
-## How this one works
-
-The Rust side owns the simulation and keeps its surface tiny — each frame it
-hands JavaScript a flat `[x, y, r, …]` buffer of ball positions:
-
-```rust
-pub fn tick(&mut self, dt: f32) { /* integrate + bounce off walls */ }
-pub fn positions(&mut self) -> Vec<f32> { /* [x, y, r] per ball */ }
-```
-
-A small React island calls `tick` once per animation frame and draws the buffer
-to a `<canvas>`. No `web-sys`, no DOM code in Rust — the island owns the canvas.
-More on the toolchain in a future post.
+I hope this blog will end up being as valuable to others as the blogs that
+helped teach me.
