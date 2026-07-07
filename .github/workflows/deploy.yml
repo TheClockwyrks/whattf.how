@@ -3,12 +3,9 @@ name: Deploy
 # Builds the static site (wasm crates + astro) and deploys it to Cloudflare Pages
 # with wrangler. Runs on pushes to master and on demand.
 #
-# Gated on the `CF_DEPLOY` repository variable so the workflow stays dormant until
-# you opt in — set it once the GitHub mirror and Cloudflare project exist:
-#   Settings → Secrets and variables → Actions
-#     Variables: CF_DEPLOY = true
-#     Secrets:   CLOUDFLARE_API_TOKEN   (token with the "Cloudflare Pages: Edit" permission)
-#                CLOUDFLARE_ACCOUNT_ID  (the account that owns the Pages project)
+# Requires these repository secrets (Settings → Secrets and variables → Actions):
+#   CLOUDFLARE_API_TOKEN   (token with the "Cloudflare Pages: Edit" permission)
+#   CLOUDFLARE_ACCOUNT_ID  (the account that owns the Pages project)
 # Also create the Pages project once (Direct Upload):
 #   wrangler pages project create whattf-how --production-branch=master
 on:
@@ -26,7 +23,6 @@ concurrency:
 
 jobs:
   deploy:
-    if: vars.CF_DEPLOY == 'true'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
