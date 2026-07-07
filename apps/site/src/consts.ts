@@ -7,4 +7,4 @@ export const SITE_DESCRIPTION =
 export const SITE_TAGLINE =
   "A programming blog exploring best practices and cool demos.";
 // External profiles rendered as icon links at the bottom of the sidebar.
-export const GITHUB_URL = "https://github.com/TheClockwyrks";
+export const GITHUB_URL = "https://github.com/TheClockwyrks/whattf.how";
