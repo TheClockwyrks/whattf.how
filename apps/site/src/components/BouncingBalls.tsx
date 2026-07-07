@@ -22,9 +22,15 @@ interface Props {
  * component owns the canvas and the animation loop, reading a flat position
  * buffer from wasm each frame and drawing it.
  */
+// A fixed seed keeps the initial layout stable across reloads — and lets
+// "reset" rebuild the exact same t=0 scattering.
+const SEED = 0x9e3779b9;
+
 export default function BouncingBalls({ count = 60, height = 360 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [ready, setReady] = useState(false);
+  // Set inside the effect once the sim exists; invoked by the reset button.
+  const resetRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     let disposed = false;
@@ -81,15 +87,25 @@ export default function BouncingBalls({ count = 60, height = 360 }: Props) {
     ensureWasm().then(() => {
       if (disposed) return;
       applySize();
-      // A fixed seed keeps the initial layout stable across reloads.
-      sim = new Simulation(count, cssWidth, height, 0x9e3779b9);
+      sim = new Simulation(count, cssWidth, height, SEED);
       ro.observe(canvas);
+
+      // Rebuild the sim from the same seed and current canvas size, restoring
+      // the deterministic t=0 state. Resetting `last` avoids a large first dt.
+      resetRef.current = () => {
+        if (disposed) return;
+        sim?.free();
+        sim = new Simulation(count, cssWidth, height, SEED);
+        last = 0;
+      };
+
       setReady(true);
       raf = requestAnimationFrame(frame);
     });
 
     return () => {
       disposed = true;
+      resetRef.current = () => {};
       cancelAnimationFrame(raf);
       ro.disconnect();
       sim?.free();
@@ -104,6 +120,16 @@ export default function BouncingBalls({ count = 60, height = 360 }: Props) {
         aria-label="Bouncing balls physics simulation running in WebAssembly"
       />
       {!ready && <p className="demo-loading">Loading simulation…</p>}
+      <div className="demo-controls">
+        <button
+          type="button"
+          className="demo-reset"
+          onClick={() => resetRef.current()}
+          disabled={!ready}
+        >
+          Reset
+        </button>
+      </div>
       <figcaption>
         Physics stepped in Rust → WebAssembly; drawn on a 2D canvas.
       </figcaption>

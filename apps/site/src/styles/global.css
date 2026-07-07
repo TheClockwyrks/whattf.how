@@ -343,11 +343,44 @@ main.wrap {
   color: var(--muted);
   font-size: 0.9rem;
 }
+.demo-controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.6rem;
+}
+.demo-reset {
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--fg);
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.3rem 0.9rem;
+  cursor: pointer;
+}
+.demo-reset:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.demo-reset:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
 
 @media (min-width: 78rem) {
   .demo {
-    width: min(52rem, 88vw);
-    margin-inline: calc((var(--content-width) - min(52rem, 88vw)) / 2);
+    /* Let the demo break out wider than the prose column, but keep its
+       centerline on the text's centerline. The demo's containing block is the
+       .wrap *content box* — that's --content-width minus its 1.5rem inline
+       padding on each side — so the symmetric outset must be measured against
+       that inner width, not --content-width itself. (Because the demo is wider
+       than its containing block the box is over-constrained, so the browser
+       honours margin-left and recomputes margin-right; feeding it the true
+       inner width makes both resolve equal, i.e. centered.) */
+    --demo-width: min(52rem, 88vw);
+    --wrap-inner: calc(var(--content-width) - 3rem);
+    width: var(--demo-width);
+    margin-inline: calc((var(--wrap-inner) - var(--demo-width)) / 2);
   }
 }
 
